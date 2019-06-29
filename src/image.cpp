@@ -641,7 +641,7 @@ static int saveHDR(lua_State * L) {
 	return 0;
 }
 
-int LuaImage_Open(lua_State* L) {
+AL2O3_EXTERN_C int LuaImage_Open(lua_State* L) {
 	static const struct luaL_Reg imageObj [] = {
 			{"width", &width},
 			{"height", &height},
