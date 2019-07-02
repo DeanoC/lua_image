@@ -620,7 +620,8 @@ static int load(lua_State * L) {
 	auto ud = imageud_create(L);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_ReadBinary);
 	if(!file) {
-		return 1;
+		lua_pushboolean(L, false);
+		return 2;
 	}
 
 	*ud = Image_Load(file);
