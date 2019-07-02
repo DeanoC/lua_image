@@ -636,7 +636,7 @@ static int saveDDS(lua_State * L) {
 	if(!file) {
 		return 0;
 	}
-	auto image = *(Image_ImageHeader const**)ud;
+	Image_ImageHeader* image = *(Image_ImageHeader**)ud;
 	Image_SaveDDS(image, file);
 
 	return 0;
@@ -776,8 +776,9 @@ AL2O3_EXTERN_C int LuaImage_Open(lua_State* L) {
 			{"saveAsJPG", &saveJPG},
 			{"saveAsHDR", &saveHDR},
 			{"saveAsKTX", &saveKTX},
-			// currently broken			{"saveAsDDS", &saveDDS},
+			{"saveAsDDS", &saveDDS},
 			{"__gc", &imageud_gc },
+
 			{nullptr, nullptr}  /* sentinel */
 	};
 
