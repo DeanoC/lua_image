@@ -617,15 +617,17 @@ static int createCubemapArrayNoClear(lua_State *L) {
 static int load(lua_State * L) {
 	char const* filename = luaL_checkstring(L, 1);
 
-	auto ud = imageud_create(L);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_ReadBinary);
 	if(!file) {
+		lua_pushnil(L);
 		lua_pushboolean(L, false);
 		return 2;
 	}
 
+	auto ud = imageud_create(L);
 	*ud = Image_Load(file);
 	lua_pushboolean(L, *ud != nullptr);
+
 	return 2;
 }
 
