@@ -57,7 +57,7 @@ static int slices(lua_State * L) {
 static int format(lua_State *L) {
 	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
 	LUA_ASSERT(image, L, "image is NIL");
-	lua_pushstring(L, ImageFormat_Name(image->format));
+	lua_pushstring(L, TinyImageFormat_Name(image->format));
 	return 1;
 }
 
@@ -391,7 +391,7 @@ static int preciseConvert(lua_State *L) {
 	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
 	LUA_ASSERT(image, L, "image is NIL");
 	auto ud = imageud_create(L);
-	*ud = Image_PreciseConvert(image, ImageFormat_FromName(luaL_checkstring(L,2)) );
+	*ud = Image_PreciseConvert(image, TinyImageFormat_FromName(luaL_checkstring(L,2)) );
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -401,7 +401,7 @@ static int fastConvert(lua_State *L) {
 	LUA_ASSERT(image, L, "image is NIL");
 	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
 	auto ud = imageud_create(L);
-	*ud = Image_FastConvert(image, ImageFormat_FromName(luaL_checkstring(L,2)), allowInPlace);
+	*ud = Image_FastConvert(image, TinyImageFormat_FromName(luaL_checkstring(L,2)), allowInPlace);
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -414,7 +414,7 @@ static int create(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 5);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create((uint32_t)w, (uint32_t)h, (uint32_t)d, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_Create((uint32_t)w, (uint32_t)h, (uint32_t)d, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -427,7 +427,7 @@ static int createNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 5);
 
 	auto ud = imageud_create(L);
-	*ud = Image_CreateNoClear((uint32_t)w, (uint32_t)h, (uint32_t)d, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_CreateNoClear((uint32_t)w, (uint32_t)h, (uint32_t)d, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -437,7 +437,7 @@ static int create1D(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 2);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create1D((uint32_t)w,ImageFormat_FromName(fmt));
+	*ud = Image_Create1D((uint32_t)w,TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -447,7 +447,7 @@ static int create1DNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 2);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create1DNoClear((uint32_t)w, ImageFormat_FromName(fmt));
+	*ud = Image_Create1DNoClear((uint32_t)w, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -458,7 +458,7 @@ static int create1DArray(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 3);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create1DArray((uint32_t)w, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_Create1DArray((uint32_t)w, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -469,7 +469,7 @@ static int create1DArrayNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 3);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create1DArrayNoClear((uint32_t)w, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_Create1DArrayNoClear((uint32_t)w, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -480,7 +480,7 @@ static int create2D(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 3);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create2D((uint32_t)w, (uint32_t)h, ImageFormat_FromName(fmt));
+	*ud = Image_Create2D((uint32_t)w, (uint32_t)h, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -490,7 +490,7 @@ static int create2DNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 3);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create2DNoClear((uint32_t)w, (uint32_t)h, ImageFormat_FromName(fmt));
+	*ud = Image_Create2DNoClear((uint32_t)w, (uint32_t)h, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -502,7 +502,7 @@ static int create2DArray(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 4);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create2DArray((uint32_t)w, (uint32_t)h, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_Create2DArray((uint32_t)w, (uint32_t)h, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -514,7 +514,7 @@ static int create2DArrayNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 4);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create2DArrayNoClear((uint32_t)w, (uint32_t)h, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_Create2DArrayNoClear((uint32_t)w, (uint32_t)h, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -526,7 +526,7 @@ static int create3D(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 4);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create3D((uint32_t)w, (uint32_t)h, (uint32_t)d, ImageFormat_FromName(fmt));
+	*ud = Image_Create3D((uint32_t)w, (uint32_t)h, (uint32_t)d, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -538,7 +538,7 @@ static int create3DNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 4);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create3DNoClear((uint32_t)w, (uint32_t)h, (uint32_t)d, ImageFormat_FromName(fmt));
+	*ud = Image_Create3DNoClear((uint32_t)w, (uint32_t)h, (uint32_t)d, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -551,7 +551,7 @@ static int create3DArray(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 5);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create3DArray((uint32_t)w, (uint32_t)h, (uint32_t)d, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_Create3DArray((uint32_t)w, (uint32_t)h, (uint32_t)d, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -563,7 +563,7 @@ static int create3DArrayNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 5);
 
 	auto ud = imageud_create(L);
-	*ud = Image_Create3DArrayNoClear((uint32_t)w, (uint32_t)h, (uint32_t)d, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_Create3DArrayNoClear((uint32_t)w, (uint32_t)h, (uint32_t)d, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -573,7 +573,7 @@ static int createCubemap(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 3);
 
 	auto ud = imageud_create(L);
-	*ud = Image_CreateCubemap((uint32_t)w, (uint32_t)h, ImageFormat_FromName(fmt));
+	*ud = Image_CreateCubemap((uint32_t)w, (uint32_t)h, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -584,7 +584,7 @@ static int createCubemapNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 3);
 
 	auto ud = imageud_create(L);
-	*ud = Image_CreateCubemapNoClear((uint32_t)w, (uint32_t)h, ImageFormat_FromName(fmt));
+	*ud = Image_CreateCubemapNoClear((uint32_t)w, (uint32_t)h, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -596,7 +596,7 @@ static int createCubemapArray(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 4);
 
 	auto ud = imageud_create(L);
-	*ud = Image_CreateCubemapArray((uint32_t)w, (uint32_t)h, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_CreateCubemapArray((uint32_t)w, (uint32_t)h, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -608,7 +608,7 @@ static int createCubemapArrayNoClear(lua_State *L) {
 	char const* fmt = luaL_checkstring(L, 4);
 
 	auto ud = imageud_create(L);
-	*ud = Image_CreateCubemapArrayNoClear((uint32_t)w, (uint32_t)h, (uint32_t)s, ImageFormat_FromName(fmt));
+	*ud = Image_CreateCubemapArrayNoClear((uint32_t)w, (uint32_t)h, (uint32_t)s, TinyImageFormat_FromName(fmt));
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
