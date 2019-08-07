@@ -237,12 +237,12 @@ static int getChannelAt(lua_State *L) {
 	int64_t index = luaL_checkinteger(L, 3);
 	chan = chan.to_lower();
 
-	Image_Channel channel = Image_Channel::Image_Red;
+	TinyImageFormat_LogicalChannel channel = TinyImageFormat_LC_Red;
 	switch(Utils::CompileTimeHash(chan)) {
-	case "red"_hash: channel = Image_Channel::Image_Red; break;
-	case "green"_hash: channel = Image_Channel::Image_Green; break;
-	case "blue"_hash: channel = Image_Channel::Image_Blue; break;
-	case "alpha"_hash: channel = Image_Channel::Image_Alpha; break;
+	case "red"_hash: channel = TinyImageFormat_LC_Red; break;
+	case "green"_hash: channel = TinyImageFormat_LC_Green; break;
+	case "blue"_hash: channel = TinyImageFormat_LC_Blue; break;
+	case "alpha"_hash: channel = TinyImageFormat_LC_Alpha; break;
 	default: lua_error(L);
 	}
 
@@ -259,17 +259,16 @@ static int setChannelAt(lua_State *L) {
 
 	chan = chan.to_lower();
 
-	Image_Channel channel = Image_Channel::Image_Red;
+	TinyImageFormat_LogicalChannel channel = TinyImageFormat_LC_Red;
 	switch(Utils::CompileTimeHash(chan)) {
-	case "red"_hash: channel = Image_Channel::Image_Red; break;
-	case "green"_hash: channel = Image_Channel::Image_Green; break;
-	case "blue"_hash: channel = Image_Channel::Image_Blue; break;
-	case "alpha"_hash: channel = Image_Channel::Image_Alpha; break;
+	case "red"_hash: channel = TinyImageFormat_LC_Red; break;
+	case "green"_hash: channel = TinyImageFormat_LC_Green; break;
+	case "blue"_hash: channel = TinyImageFormat_LC_Blue; break;
+	case "alpha"_hash: channel = TinyImageFormat_LC_Alpha; break;
 	default: lua_error(L);
 	}
+
 	Image_SetChannelAt(image, channel, index, v);
-
-
 	return 0;
 }
 static int copy(lua_State *L) {
