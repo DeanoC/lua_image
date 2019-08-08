@@ -230,26 +230,6 @@ static int calculateIndex(lua_State *L) {
 	return 1;
 }
 
-static int getChannelAt(lua_State *L) {
-	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
-	LUA_ASSERT(image, L, "image is NIL");
-	tinystl::string chan(luaL_checkstring(L, 2));
-	int64_t index = luaL_checkinteger(L, 3);
-	chan = chan.to_lower();
-
-	TinyImageFormat_LogicalChannel channel = TinyImageFormat_LC_Red;
-	switch(Utils::CompileTimeHash(chan)) {
-	case "red"_hash: channel = TinyImageFormat_LC_Red; break;
-	case "green"_hash: channel = TinyImageFormat_LC_Green; break;
-	case "blue"_hash: channel = TinyImageFormat_LC_Blue; break;
-	case "alpha"_hash: channel = TinyImageFormat_LC_Alpha; break;
-	default: lua_error(L);
-	}
-
-	lua_pushnumber(L, Image_GetChannelAt(image, channel, index));
-	return 1;
-}
-
 static int setChannelAt(lua_State *L) {
 	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
 	LUA_ASSERT(image, L, "image is NIL");
@@ -732,7 +712,6 @@ AL2O3_EXTERN_C int LuaImage_Open(lua_State* L) {
 
 			{"getPixelAt", &getPixelAt},
 			{"setPixelAt", &setPixelAt},
-			{"getChannelAt", &getChannelAt},
 			{"setChannelAt", &setChannelAt},
 
 			{"copy", &copy},
