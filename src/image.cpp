@@ -87,7 +87,7 @@ static int getPixelAt(lua_State *L) {
 	LUA_ASSERT(image, L, "image is NIL");
 	int64_t index = luaL_checkinteger(L, 2);
 	Image_PixelD pixel {};
-	Image_GetPixelAt(image, &pixel, index);
+	Image_GetPixelAtD(image, &pixel, index);
 
 	lua_pushnumber(L, pixel.r);
 	lua_pushnumber(L, pixel.g);
