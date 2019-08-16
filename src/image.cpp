@@ -107,7 +107,7 @@ static int setPixelAt(lua_State *L) {
 	double a = luaL_checknumber(L, 6);
 
 	Image_PixelD pixel = { r, g, b, a };
-	Image_SetPixelAt(image, &pixel, index);
+	Image_SetPixelAtD(image, &pixel, index);
 
 	return 0;
 }
@@ -230,27 +230,6 @@ static int calculateIndex(lua_State *L) {
 	return 1;
 }
 
-static int setChannelAt(lua_State *L) {
-	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
-	LUA_ASSERT(image, L, "image is NIL");
-	tinystl::string chan(luaL_checkstring(L, 2));
-	int64_t index = luaL_checkinteger(L, 3);
-	double v = luaL_checknumber(L, 4);
-
-	chan = chan.to_lower();
-
-	TinyImageFormat_LogicalChannel channel = TinyImageFormat_LC_Red;
-	switch(Utils::CompileTimeHash(chan)) {
-	case "red"_hash: channel = TinyImageFormat_LC_Red; break;
-	case "green"_hash: channel = TinyImageFormat_LC_Green; break;
-	case "blue"_hash: channel = TinyImageFormat_LC_Blue; break;
-	case "alpha"_hash: channel = TinyImageFormat_LC_Alpha; break;
-	default: lua_error(L);
-	}
-
-	Image_SetChannelAt(image, channel, index, v);
-	return 0;
-}
 static int copy(lua_State *L) {
 	auto src = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
 	auto dst = *(Image_ImageHeader const**)luaL_checkudata(L, 2, MetaName);
@@ -712,7 +691,6 @@ AL2O3_EXTERN_C int LuaImage_Open(lua_State* L) {
 
 			{"getPixelAt", &getPixelAt},
 			{"setPixelAt", &setPixelAt},
-			{"setChannelAt", &setChannelAt},
 
 			{"copy", &copy},
 			{"copySlice", &copySlice},
