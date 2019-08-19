@@ -589,7 +589,7 @@ static int load(lua_State * L) {
 	return 2;
 }
 
-static int saveDDS(lua_State * L) {
+static int saveAsDDS(lua_State * L) {
 	void* ud = luaL_checkudata(L, 1, MetaName);
 	char const* filename = luaL_checkstring(L, 2);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_WriteBinary);
@@ -597,12 +597,13 @@ static int saveDDS(lua_State * L) {
 		return 0;
 	}
 	Image_ImageHeader* image = *(Image_ImageHeader**)ud;
-	Image_SaveDDS(image, file);
+	bool ret = Image_SaveAsDDS(image, file);
 
-	return 0;
+	lua_pushboolean(L, ret);
+	return 1;
 }
 
-static int saveTGA(lua_State * L) {
+static int saveAsTGA(lua_State * L) {
 	void* ud = luaL_checkudata(L, 1, MetaName);
 	char const* filename = luaL_checkstring(L, 2);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_WriteBinary);
@@ -610,11 +611,11 @@ static int saveTGA(lua_State * L) {
 		return 0;
 	}
 	Image_ImageHeader* image = *(Image_ImageHeader**)ud;
-	Image_SaveTGA(image, file);
-
-	return 0;
+	bool ret = Image_SaveAsTGA(image, file);
+	lua_pushboolean(L, ret);
+	return 1;
 }
-static int saveBMP(lua_State * L) {
+static int saveAsBMP(lua_State * L) {
 	void* ud = luaL_checkudata(L, 1, MetaName);
 	char const* filename = luaL_checkstring(L, 2);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_WriteBinary);
@@ -622,11 +623,11 @@ static int saveBMP(lua_State * L) {
 		return 0;
 	}
 	auto image = *(Image_ImageHeader const**)ud;
-	Image_SaveBMP(image, file);
-
-	return 0;
+	bool ret = Image_SaveAsBMP(image, file);
+	lua_pushboolean(L, ret);
+	return 1;
 }
-static int savePNG(lua_State * L) {
+static int saveAsPNG(lua_State * L) {
 	void* ud = luaL_checkudata(L, 1, MetaName);
 	char const* filename = luaL_checkstring(L, 2);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_WriteBinary);
@@ -634,12 +635,12 @@ static int savePNG(lua_State * L) {
 		return 0;
 	}
 	auto image = *(Image_ImageHeader const**)ud;
-	Image_SavePNG(image, file);
-
-	return 0;
+	bool ret = Image_SaveAsPNG(image, file);
+	lua_pushboolean(L, ret);
+	return 1;
 }
 
-static int saveJPG(lua_State * L) {
+static int saveAsJPG(lua_State * L) {
 	void* ud = luaL_checkudata(L, 1, MetaName);
 	char const* filename = luaL_checkstring(L, 2);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_WriteBinary);
@@ -647,12 +648,12 @@ static int saveJPG(lua_State * L) {
 		return 0;
 	}
 	auto image = *(Image_ImageHeader const**)ud;
-	Image_SaveJPG(image, file);
-
-	return 0;
+	bool ret = Image_SaveAsJPG(image, file);
+	lua_pushboolean(L, ret);
+	return 1;
 }
 
-static int saveKTX(lua_State * L) {
+static int saveAsKTX(lua_State * L) {
 	void* ud = luaL_checkudata(L, 1, MetaName);
 	char const* filename = luaL_checkstring(L, 2);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_WriteBinary);
@@ -660,12 +661,12 @@ static int saveKTX(lua_State * L) {
 		return 0;
 	}
 	auto image = *(Image_ImageHeader const**)ud;
-	Image_SaveKTX(image, file);
-
-	return 0;
+	bool ret = Image_SaveAsKTX(image, file);
+	lua_pushboolean(L, ret);
+	return 1;
 }
 
-static int saveHDR(lua_State * L) {
+static int saveAsHDR(lua_State * L) {
 	void* ud = luaL_checkudata(L, 1, MetaName);
 	char const* filename = luaL_checkstring(L, 2);
 	VFile::ScopedFile file = VFile::File::FromFile(filename, Os_FM_WriteBinary);
@@ -673,9 +674,64 @@ static int saveHDR(lua_State * L) {
 		return 0;
 	}
 	auto image = *(Image_ImageHeader const**)ud;
-	Image_SaveHDR(image, file);
+	bool ret = Image_SaveAsHDR(image, file);
+	lua_pushboolean(L, ret);
+	return 1;
+}
 
-	return 0;
+static int canSaveAsDDS(lua_State * L) {
+	void* ud = luaL_checkudata(L, 1, MetaName);
+	Image_ImageHeader* image = *(Image_ImageHeader**)ud;
+	bool ret = Image_CanSaveAsDDS(image);
+	lua_pushboolean(L, ret);
+	return 1;
+}
+
+static int canSaveAsTGA(lua_State * L) {
+	void* ud = luaL_checkudata(L, 1, MetaName);
+	Image_ImageHeader* image = *(Image_ImageHeader**)ud;
+	bool ret = Image_CanSaveAsTGA(image);
+	lua_pushboolean(L, ret);
+	return 1;
+}
+static int canSaveAsBMP(lua_State * L) {
+	void* ud = luaL_checkudata(L, 1, MetaName);
+	auto image = *(Image_ImageHeader const**)ud;
+	bool ret = Image_CanSaveAsBMP(image);
+	lua_pushboolean(L, ret);
+	return 1;
+}
+static int canSaveAsPNG(lua_State * L) {
+	void* ud = luaL_checkudata(L, 1, MetaName);
+	auto image = *(Image_ImageHeader const**)ud;
+	bool ret = Image_CanSaveAsPNG(image);
+	lua_pushboolean(L, ret);
+	return 1;
+}
+
+static int canSaveAsJPG(lua_State * L) {
+	void* ud = luaL_checkudata(L, 1, MetaName);
+
+	auto image = *(Image_ImageHeader const**)ud;
+	bool ret = Image_CanSaveAsJPG(image);
+	lua_pushboolean(L, ret);
+	return 1;
+}
+
+static int canSaveAsKTX(lua_State * L) {
+	void* ud = luaL_checkudata(L, 1, MetaName);
+	auto image = *(Image_ImageHeader const**)ud;
+	bool ret = Image_CanSaveAsKTX(image);
+	lua_pushboolean(L, ret);
+	return 1;
+}
+
+static int canSaveAsHDR(lua_State * L) {
+	void* ud = luaL_checkudata(L, 1, MetaName);
+	auto image = *(Image_ImageHeader const**)ud;
+	bool ret = Image_CanSaveAsHDR(image);
+	lua_pushboolean(L, ret);
+	return 1;
 }
 
 AL2O3_EXTERN_C int LuaImage_Open(lua_State* L) {
@@ -728,15 +784,22 @@ AL2O3_EXTERN_C int LuaImage_Open(lua_State* L) {
 			{"preciseConvert", &preciseConvert},
 			{"fastConvert", &fastConvert},
 
-			{"saveAsTGA", &saveTGA},
-			{"saveAsBMP", &saveBMP},
-			{"saveAsPNG", &savePNG},
-			{"saveAsJPG", &saveJPG},
-			{"saveAsHDR", &saveHDR},
-			{"saveAsKTX", &saveKTX},
-			{"saveAsDDS", &saveDDS},
-			{"__gc", &imageud_gc },
+			{"saveAsTGA", &saveAsTGA},
+			{"saveAsBMP", &saveAsBMP},
+			{"saveAsPNG", &saveAsPNG},
+			{"saveAsJPG", &saveAsJPG},
+			{"saveAsHDR", &saveAsHDR},
+			{"saveAsKTX", &saveAsKTX},
+			{"saveAsDDS", &saveAsDDS},
 
+			{"canSaveAsTGA", &canSaveAsTGA},
+			{"canSaveAsBMP", &canSaveAsBMP},
+			{"canSaveAsPNG", &canSaveAsPNG},
+			{"canSaveAsJPG", &canSaveAsJPG},
+			{"canSaveAsHDR", &canSaveAsHDR},
+			{"canSaveAsKTX", &canSaveAsKTX},
+			{"canSaveAsDDS", &canSaveAsDDS},
+			{"__gc", &imageud_gc },
 			{nullptr, nullptr}  /* sentinel */
 	};
 
