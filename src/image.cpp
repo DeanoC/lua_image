@@ -86,13 +86,13 @@ static int getPixelAt(lua_State *L) {
 	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
 	LUA_ASSERT(image, L, "image is NIL");
 	int64_t index = luaL_checkinteger(L, 2);
-	Image_PixelD pixel {};
-	Image_GetPixelAtD(image, &pixel, index);
+	double pixel[4];
+	Image_GetPixelAtD(image, (double*)&pixel, index);
 
-	lua_pushnumber(L, pixel.r);
-	lua_pushnumber(L, pixel.g);
-	lua_pushnumber(L, pixel.b);
-	lua_pushnumber(L, pixel.a);
+	lua_pushnumber(L, pixel[0]); // r
+	lua_pushnumber(L, pixel[1]); // g
+	lua_pushnumber(L, pixel[2]); // b
+	lua_pushnumber(L, pixel[3]); // a
 
 	return 4;
 }
@@ -101,13 +101,14 @@ static int setPixelAt(lua_State *L) {
 	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
 	LUA_ASSERT(image, L, "image is NIL");
 	int64_t index = luaL_checkinteger(L, 2);
-	double r = luaL_checknumber(L, 3);
-	double g = luaL_checknumber(L, 4);
-	double b = luaL_checknumber(L, 5);
-	double a = luaL_checknumber(L, 6);
 
-	Image_PixelD pixel = { r, g, b, a };
-	Image_SetPixelAtD(image, &pixel, index);
+	double pixel[4];
+	pixel[0] = luaL_checknumber(L, 3); // r
+	pixel[1] = luaL_checknumber(L, 4); // g
+	pixel[2] = luaL_checknumber(L, 5); // b
+	pixel[3] = luaL_checknumber(L, 6); // a
+
+	Image_SetPixelAtD(image, pixel, index);
 
 	return 0;
 }
