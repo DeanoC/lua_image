@@ -30,6 +30,8 @@ set(Deps
 		al2o3_platform
 		gfx_image_interface
 		gfx_imageio
+		gfx_imagecompress
+		gfx_imagedecompress
 		lua_base5.3
 		)
 ADD_LIB(${LibName} "${Interface}" "${Src}" "${Deps}")
