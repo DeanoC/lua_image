@@ -4,6 +4,7 @@
 #include "gfx_imageio/io.h"
 #include "gfx_image/create.h"
 #include "gfx_image/utils.h"
+#include "gfx_imagecompress/imagecompress.h"
 #include "lua_base5.3/lua.hpp"
 #include "lua_base5.3/utils.h"
 
@@ -320,51 +321,6 @@ static int linkedImage(lua_State *L) {
 	return 2;
 }
 
-static int createMipMapChain(lua_State * L) {
-	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
-	LUA_ASSERT(image, L, "image is NIL");
-	bool generateFromImage = lua_isnil(L, 2) ? true : (bool)lua_toboolean(L, 2);
-	Image_CreateMipMapChain(image,generateFromImage);
-	return 0;
-}
-
-static int clone(lua_State *L) {
-	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
-	LUA_ASSERT(image, L, "image is NIL");
-	auto ud = imageud_create(L);
-	*ud = Image_Clone(image);
-	lua_pushboolean(L, *ud != nullptr);
-	return 2;
-}
-
-static int cloneStructure(lua_State *L) {
-	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
-	LUA_ASSERT(image, L, "image is NIL");
-	auto ud = imageud_create(L);
-	*ud = Image_CloneStructure(image);
-	lua_pushboolean(L, *ud != nullptr);
-	return 2;
-}
-
-static int preciseConvert(lua_State *L) {
-	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
-	LUA_ASSERT(image, L, "image is NIL");
-	auto ud = imageud_create(L);
-	*ud = Image_PreciseConvert(image, TinyImageFormat_FromName(luaL_checkstring(L,2)) );
-	lua_pushboolean(L, *ud != nullptr);
-	return 2;
-}
-
-static int fastConvert(lua_State *L) {
-	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
-	LUA_ASSERT(image, L, "image is NIL");
-	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
-	auto ud = imageud_create(L);
-	*ud = Image_FastConvert(image, TinyImageFormat_FromName(luaL_checkstring(L,2)), allowInPlace);
-	lua_pushboolean(L, *ud != nullptr);
-	return 2;
-}
-
 static int create(lua_State *L) {
 	int64_t w = luaL_checkinteger(L, 1);
 	int64_t h = luaL_checkinteger(L, 2);
@@ -568,6 +524,121 @@ static int createCubemapArrayNoClear(lua_State *L) {
 
 	auto ud = imageud_create(L);
 	*ud = Image_CreateCubemapArrayNoClear((uint32_t)w, (uint32_t)h, (uint32_t)s, TinyImageFormat_FromName(fmt));
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int createMipMapChain(lua_State * L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool generateFromImage = lua_isnil(L, 2) ? true : (bool)lua_toboolean(L, 2);
+	Image_CreateMipMapChain(image,generateFromImage);
+	return 0;
+}
+
+static int clone(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	auto ud = imageud_create(L);
+	*ud = Image_Clone(image);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int cloneStructure(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	auto ud = imageud_create(L);
+	*ud = Image_CloneStructure(image);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int preciseConvert(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	auto ud = imageud_create(L);
+	*ud = Image_PreciseConvert(image, TinyImageFormat_FromName(luaL_checkstring(L,2)) );
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int fastConvert(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
+	auto ud = imageud_create(L);
+	*ud = Image_FastConvert(image, TinyImageFormat_FromName(luaL_checkstring(L,2)), allowInPlace);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int compressAMDBC1(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
+	auto ud = imageud_create(L);
+	*ud = Image_CompressAMDBC1(image, nullptr, nullptr, nullptr, nullptr);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int compressAMDBC2(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
+	auto ud = imageud_create(L);
+	*ud = Image_CompressAMDBC2(image, nullptr, nullptr, nullptr);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int compressAMDBC3(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
+	auto ud = imageud_create(L);
+	*ud = Image_CompressAMDBC3(image, nullptr, nullptr, nullptr);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int compressAMDBC4(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
+	auto ud = imageud_create(L);
+	*ud = Image_CompressAMDBC4(image, nullptr, nullptr);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int compressAMDBC5(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
+	auto ud = imageud_create(L);
+	*ud = Image_CompressAMDBC5(image, nullptr, nullptr);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int compressAMDBC6H(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
+	auto ud = imageud_create(L);
+	*ud = Image_CompressAMDBC6H(image, nullptr, nullptr, nullptr);
+	lua_pushboolean(L, *ud != nullptr);
+	return 2;
+}
+
+static int compressAMDBC7(lua_State *L) {
+	auto image = *(Image_ImageHeader const**)luaL_checkudata(L, 1, MetaName);
+	LUA_ASSERT(image, L, "image is NIL");
+	bool allowInPlace = lua_isnil(L, 2) ? false : (bool)lua_toboolean(L, 3);
+	auto ud = imageud_create(L);
+	*ud = Image_CompressAMDBC7(image, nullptr, nullptr, nullptr);
 	lua_pushboolean(L, *ud != nullptr);
 	return 2;
 }
@@ -784,6 +855,14 @@ AL2O3_EXTERN_C int LuaImage_Open(lua_State* L) {
 			{"cloneStructure", &cloneStructure},
 			{"preciseConvert", &preciseConvert},
 			{"fastConvert", &fastConvert},
+
+			{"compressAMDBC1", &compressAMDBC1},
+			{"compressAMDBC2", &compressAMDBC2},
+			{"compressAMDBC3", &compressAMDBC3},
+			{"compressAMDBC4", &compressAMDBC4},
+			{"compressAMDBC5", &compressAMDBC5},
+			{"compressAMDBC6H", &compressAMDBC6H},
+			{"compressAMDBC7", &compressAMDBC7},
 
 			{"saveAsTGA", &saveAsTGA},
 			{"saveAsBMP", &saveAsBMP},
